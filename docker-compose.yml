@@ -1,0 +1,27 @@
+version: '3.7'
+
+services:
+  ethancedwards:
+    image: ethancedwards8/ethancedwards-quotes
+    networks:
+      - traefik-public
+      - ethancedwards-internal
+    restart: always
+    deploy:
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=traefik-public
+        - traefik.constraint-label=traefik-public
+        - traefik.http.routers.ece-http.rule=Host(`${DOMAIN1?Variable not set}`)
+        - traefik.http.services.ece-http.loadbalancer.server.port=5000
+        - traefik.http.routers.ece-http.entrypoints=http
+        - traefik.http.routers.ece-http.middlewares=https-redirect
+        - traefik.http.routers.ece-https.rule=Host(`${DOMAIN1?Variable not set}`)
+        - traefik.http.routers.ece-https.entrypoints=https
+        - traefik.http.routers.ece-https.tls=true
+        - traefik.http.routers.ece-https.tls.certresolver=le
+networks:
+  traefik-public:
+    external: true
+  ethancedwards-internal:
+    external: false
