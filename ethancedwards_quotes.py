@@ -68,6 +68,16 @@ quotes = [
         "author": "Chip Heath",
         "quote": "The Curse of Knowledge: when we are given knowledge, it is impossible to imagine what it's like to LACK that knowledge."
     },
+    {
+        "id": 12,
+        "author": "Russian Proverb",
+        "quote": "The shark that does not swims, drowns."
+    },
+    {
+        "id": 13,
+        "author": "Yoda",
+        "quote": "Do, or do not. There is no try."
+    },
 ]
 
 class Quote(Resource):
