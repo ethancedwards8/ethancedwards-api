@@ -78,6 +78,11 @@ quotes = [
         "author": "Yoda",
         "quote": "Do, or do not. There is no try."
     },
+    {
+        "id": 14,
+        "author": "Henry Ford",
+        "quote": "Whether you think you can or think you can't you're right"
+    },
 ]
 
 class Quote(Resource):
