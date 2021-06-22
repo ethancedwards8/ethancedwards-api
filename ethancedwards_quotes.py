@@ -92,7 +92,7 @@ class Quote(Resource):
         quote = quotes.get(id)
 
         if quote:
-            return quote, 200
+            return quote, 200, {'Access-Control-Allow-Origin': '*'}
 
         return "quote not found", 404
 
