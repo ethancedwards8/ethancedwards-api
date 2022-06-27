@@ -3,9 +3,12 @@
 from flask import Flask
 from flask_restful import Api, Resource, reqparse
 import random
+import os
 
 app = Flask(__name__)
 api = Api(app)
+
+DEV = os.environ.get('DEV')
 
 quotes = {
     0: {
@@ -83,6 +86,11 @@ quotes = {
         "author": "Henry Ford",
         "quote": "Whether you think you can or think you can't you're right"
     },
+    15: {
+        "id": 15,
+        "author": "Will Durant", # https://medium.com/the-mission/my-favourite-quote-of-all-time-is-a-misattribution-66356f22843d oof
+        "quote": "We are what we repeatedly do. Excellence, then, is not an act, but a habit."
+    }
 }
 
 class Quote(Resource):
@@ -96,7 +104,14 @@ class Quote(Resource):
 
         return "quote not found", 404
 
+
+class Dump(Resource):
+    def get(self):
+        return quotes, 200
+
+
 api.add_resource(Quote, "/quotes/v1", "/quotes/v1/", "/quotes/v1/<int:id>/")
+api.add_resource(Dump, "/quotes/v1/dump", "/quotes/v1/dump/")
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=80)
+    app.run(host='0.0.0.0', port=(8000 if DEV else 80))
