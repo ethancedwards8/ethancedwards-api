@@ -1,4 +1,4 @@
-FROM python:3.8.5-alpine
+FROM python:alpine
 
 COPY . /app
 RUN pip install flask flask-restful
