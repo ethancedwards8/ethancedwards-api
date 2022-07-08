@@ -15,8 +15,6 @@ DEV = os.environ.get('DEV')
 with open('quotes.json') as f:
     quotes = json.load(f)
 
-print(quotes)
-
 class Quote(Resource):
     def get(self, id=0):
         if id == 0:

@@ -72,11 +72,16 @@
     {
         "id": 14,
         "author": "Henry Ford",
-        "quote": "Whether you think you can or think you can't you're right"
+        "quote": "Whether you think you can or think you can't you're right."
     },
     {
         "id": 15,
         "author": "Will Durant",
         "quote": "We are what we repeatedly do. Excellence, then, is not an act, but a habit."
+    },
+    {
+	"id": 16,
+	"author": "Victor Fontanez",
+	"quote": "The grass isn't greener on the other side, the grass is greener where you water it at."
     }
 ]
