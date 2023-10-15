@@ -83,5 +83,20 @@
 	"id": 16,
 	"author": "Victor Fontanez",
 	"quote": "The grass isn't greener on the other side, the grass is greener where you water it at."
+    },
+    {
+        "id": 17,
+	"author": "Walter Rugaber",
+	"quote": "The humanities remind us that we’re part of a civilized society."
+    },
+    {
+        "id": 18,
+	"author": "Richard P. Feynman",
+	"quote": "What I cannot create I do not understand."
+    },
+    {
+        "id": 19,
+	"author": "Richard P. Feynman",
+	"quote": "Know how to solve every problem that has been solved"
     }
 ]
