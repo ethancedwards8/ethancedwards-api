@@ -26,8 +26,8 @@
     },
     {
         "id": 5,
-        "author": "Linus Torvalds",
-        "quote": "Those that can, do. Those that can't, complain."
+        "author": "Richard P. Feynman",
+        "quote": "I'm smart enough to know that I'm dumb."
     },
     {
         "id": 6,
@@ -97,6 +97,11 @@
     {
         "id": 19,
 	"author": "Richard P. Feynman",
-	"quote": "Know how to solve every problem that has been solved"
+	"quote": "Know how to solve every problem that has been solved."
+    },
+    {
+        "id": 20,
+        "author": "Richard P. Feynman",
+        "quote": "Study hard what interests you the most in the most undisciplined, irreverent and original manner possible."
     }
 ]
