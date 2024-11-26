@@ -8,10 +8,11 @@ URL = "https://theridgepodcast.com/feed/podcast"
 feed = feedparser.parse(URL)
 
 class Episode:
-    def __init__(self, index, title, date):
+    def __init__(self, index, title, date, link):
         self.index = index
         self.title = title
         self.date = date
+        self.link = link
     def toJSON(self):
         return self.__dict__
 
@@ -21,8 +22,10 @@ i = len(feed.entries)
 count = i
 
 for entry in feed.entries:
-    podcast.append(Episode(i, entry.title, entry.published).toJSON())
+    podcast.append(Episode(i, entry.title, entry.published, entry.link).toJSON())
     i -= 1
+
+print(podcast)
 
 class Podcast(Resource):
     def get(self, id=0):
