@@ -39,6 +39,7 @@
               BuildInputs = with pkgs.python3Packages; [
                 flask
                 flask-restful
+                feedparser
                 setuptools
               ];
             }
