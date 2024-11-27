@@ -39,7 +39,7 @@ class Podcast(Resource):
         if episode:
             return episode, 200, {'Access-Control-Allow-Origin': '*'}
 
-        return "quote not found", 404
+        return "episode not found", 404
 
 class PodcastDump(Resource):
     def get(self):
