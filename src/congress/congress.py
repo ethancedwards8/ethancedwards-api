@@ -26,7 +26,6 @@ client = GeocodioClient(GEO_KEY)
 true = True
 null = None
 
-
 class RepInfo:
     # nice to have
     def toJSON(self):
@@ -57,7 +56,7 @@ class RepInfo:
 
         # clean up memory and reduce object json output
         del self.__houseInfo, self.__senate1Info, self.__senate2Info
-    
+
     def __getMemberInfo(self, bioguideId):
         # eval casts the JSON to a dict
         return eval(congress.get(CONGRESS_API + '/member/' + bioguideId).content)['member']
@@ -65,7 +64,7 @@ class RepInfo:
 class Congress(Resource):
     def get(self, address=None):
         # error handling if a bad address is inputted
-        try: 
+        try:
             # roundabout way of mangling the geocodio api to give me the congressional districts!
             congressObject = client.geocode(address, fields=['cd'])['results'][0]['fields']['congressional_districts'][0]
 
@@ -73,4 +72,3 @@ class Congress(Resource):
 
         except:
             return "address not vald", 404
-        
