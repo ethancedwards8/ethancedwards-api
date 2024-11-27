@@ -5,7 +5,6 @@ from flask_restful import Api, Resource, reqparse
 
 URL = "https://theridgepodcast.com/feed/podcast"
 
-feed = feedparser.parse(URL)
 
 class Episode:
     def __init__(self, index, title, date, link):
@@ -18,21 +17,25 @@ class Episode:
 
 podcast = [ ]
 
-i = len(feed.entries)
-count = i
+count = len(podcast)
 
-for entry in feed.entries:
-    podcast.append(Episode(i, entry.title, entry.published, entry.link).toJSON())
-    i -= 1
-
-print(podcast)
+def getEps():
+    print("request made")
+    feed = feedparser.parse(URL)
+    i = len(feed.entries)
+    for entry in feed.entries:
+        podcast.append(Episode(i, entry.title, entry.published, entry.link).toJSON())
+        i -= 1
 
 class Podcast(Resource):
     def get(self, id=0):
+        getEps()
+        # podcast/v1/0 returns a random episode
         if id == 0:
             return random.choice(podcast), 200
 
         episode = podcast[count - id]
+        # returns episode X when /podcast/v1/X
         if episode:
             return episode, 200, {'Access-Control-Allow-Origin': '*'}
 
@@ -40,5 +43,7 @@ class Podcast(Resource):
 
 class PodcastDump(Resource):
     def get(self):
+        getEps()
+        # returns list of all podcasts
         return podcast, 200
 
