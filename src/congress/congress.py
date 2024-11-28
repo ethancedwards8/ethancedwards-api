@@ -50,6 +50,7 @@ class RepInfo:
         self.__houseInfo = self.__getMemberInfo(self.house['references']['bioguide_id'])
 
         # add pictures and terms of each member
+        self.house['type'] = self.house['type'].capitalize()
         self.house['picture'] = self.__houseInfo['depiction']['imageUrl']
         self.house['bio']['full_name'] = self.__houseInfo['directOrderName']
         self.house['state'] = self.__houseInfo['state']
@@ -61,11 +62,13 @@ class RepInfo:
             self.__senate2Info = self.__getMemberInfo(self.senate2['references']['bioguide_id'])
 
             # add pictures and terms of each member
+            self.senate1['type'] = self.senate1['type'].capitalize()
             self.senate1['picture'] = self.__senate1Info['depiction']['imageUrl']
             self.senate1['bio']['full_name'] = self.__senate1Info['directOrderName']
             self.senate1['state'] = self.__senate1Info['state']
             self.senate1['terms'] = self.__senate1Info['terms']
 
+            self.senate2['type'] = self.senate2['type'].capitalize()
             self.senate2['picture'] = self.__senate2Info['depiction']['imageUrl']
             self.senate2['bio']['full_name'] = self.__senate2Info['directOrderName']
             self.senate2['state'] = self.__senate2Info['state']
