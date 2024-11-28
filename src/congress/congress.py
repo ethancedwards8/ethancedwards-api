@@ -63,12 +63,12 @@ class RepInfo:
             # add pictures and terms of each member
             self.senate1['picture'] = self.__senate1Info['depiction']['imageUrl']
             self.senate1['bio']['full_name'] = self.__senate1Info['directOrderName']
-            self.house['state'] = self.__senate1Info['state']
+            self.senate1['state'] = self.__senate1Info['state']
             self.senate1['terms'] = self.__senate1Info['terms']
 
             self.senate2['picture'] = self.__senate2Info['depiction']['imageUrl']
             self.senate2['bio']['full_name'] = self.__senate2Info['directOrderName']
-            self.house['state'] = self.__senate2Info['state']
+            self.senate2['state'] = self.__senate2Info['state']
             self.senate2['terms'] = self.__senate2Info['terms']
 
             # clean up memory and reduce object json output
