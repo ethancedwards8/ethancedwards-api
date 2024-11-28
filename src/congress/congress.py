@@ -51,6 +51,7 @@ class RepInfo:
 
         # add pictures and terms of each member
         self.house['picture'] = self.__houseInfo['depiction']['imageUrl']
+        self.house['bio']['full_name'] = self.__houseInfo['directOrderName']
         self.house['terms'] = self.__houseInfo['terms']
 
         # for DC, PR, territories, etc, who don't have senators
@@ -60,9 +61,11 @@ class RepInfo:
 
             # add pictures and terms of each member
             self.senate1['picture'] = self.__senate1Info['depiction']['imageUrl']
+            self.senate1['bio']['full_name'] = self.__senate1Info['directOrderName']
             self.senate1['terms'] = self.__senate1Info['terms']
 
             self.senate2['picture'] = self.__senate2Info['depiction']['imageUrl']
+            self.senate2['bio']['full_name'] = self.__senate2Info['directOrderName']
             self.senate2['terms'] = self.__senate2Info['terms']
 
             # clean up memory and reduce object json output
