@@ -95,7 +95,7 @@ class Congress(Resource):
             # roundabout way of mangling the geocodio api to give me the congressional districts!
             congressObject = client.geocode(address, fields=['cd'])['results'][0]['fields']['congressional_districts'][0]
 
-            return RepInfo(congressObject['name'], congressObject['ocd_id'], congressObject['current_legislators']).toJSON(), 200
+            return RepInfo(congressObject['name'], congressObject['ocd_id'], congressObject['current_legislators']).toJSON(), 200, {'Access-Control-Allow-Origin': '*'}
 
         except:
             return "address not valid", 404
