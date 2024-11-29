@@ -37,7 +37,7 @@ class Podcast(Resource):
         episode = podcast[count - id]
         # returns episode X when /podcast/v1/X
         if episode:
-            return episode, 200, {'Access-Control-Allow-Origin': '*'}
+            return episode, 200
 
         return "episode not found", 404
 

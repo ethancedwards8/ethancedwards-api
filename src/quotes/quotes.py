@@ -15,7 +15,7 @@ class Quote(Resource):
             quote = quotes[id]
 
             if quote:
-                return quote, 200, {'Access-Control-Allow-Origin': '*'}
+                return quote, 200
 
         except:
             return "quote not found", 404
