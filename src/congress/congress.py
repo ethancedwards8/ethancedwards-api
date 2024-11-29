@@ -37,9 +37,11 @@ class RepInfo:
         return self.__dict__
 
     # init class
-    def __init__(self, name, ocd_id, reps):
+    def __init__(self, name, ocd_id, reps, address):
         self.name = name
         self.ocd_id = ocd_id
+        # needed later for data retrieval
+        self.address = address
         self.house = reps[0]
 
         # for DC, PR, territories, etc, who don't have senators
@@ -129,10 +131,13 @@ class Congress(Resource):
         # error handling if a bad address is inputted
         try:
             # roundabout way of mangling the geocodio api to give me the congressional districts!
-            congressObject = client.geocode(address, fields=['cd'])['results'][0]['fields']['congressional_districts'][0]
+            result = client.geocode(address, fields=['cd'])
+            congressReps = result['results'][0]['fields']['congressional_districts'][0]
+            address = result['input']['formatted_address']
 
-            return RepInfo(congressObject['name'], congressObject['ocd_id'], congressObject['current_legislators']).toJSON(), 200
+            return RepInfo(congressReps['name'], congressReps['ocd_id'], congressReps['current_legislators'], address).toJSON(), 200
 
         except:
             return "address not valid", 404
+
 
