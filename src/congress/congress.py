@@ -55,6 +55,7 @@ class RepInfo:
         self.house['bio']['full_name'] = self.__houseInfo['directOrderName']
         self.house['state'] = self.__houseInfo['state']
         self.house['terms'] = self.__houseInfo['terms']
+        self.house['typeSince'] = self.__findYearOfOffice(self.house)
 
         # for DC, PR, territories, etc, who don't have senators
         if len(reps) > 1:
@@ -67,18 +68,33 @@ class RepInfo:
             self.senate1['bio']['full_name'] = self.__senate1Info['directOrderName']
             self.senate1['state'] = self.__senate1Info['state']
             self.senate1['terms'] = self.__senate1Info['terms']
+            self.senate1['typeSince'] = self.__findYearOfOffice(self.senate1)
 
             self.senate2['type'] = self.senate2['type'].capitalize()
             self.senate2['picture'] = self.__senate2Info['depiction']['imageUrl']
             self.senate2['bio']['full_name'] = self.__senate2Info['directOrderName']
             self.senate2['state'] = self.__senate2Info['state']
             self.senate2['terms'] = self.__senate2Info['terms']
+            self.senate2['typeSince'] = self.__findYearOfOffice(self.senate2)
 
             # clean up memory and reduce object json output
             del self.__senate1Info, self.__senate2Info
 
         # clean up memory and reduce object json output
         del self.__houseInfo
+
+    # my data doesn't tell me when the rep started in his office
+    # so I get the info myself by looping through his list to find when it changes
+    # this is helpful for reps who have moved from house to senate or vice versa
+    def __findYearOfOffice(self, rep):
+        currentOffice = rep['type']
+        n = 0
+        # start at end of list and move back to see when it changes
+        for i in reversed(rep['terms']):
+            if i['memberType'] == currentOffice:
+                n = n + 1
+    
+        return(rep['terms'][len(rep['terms']) - n]['startYear'])
 
     # pull info from congress API
     def __getMemberInfo(self, bioguideId):
@@ -99,3 +115,4 @@ class Congress(Resource):
 
         except:
             return "address not valid", 404
+
