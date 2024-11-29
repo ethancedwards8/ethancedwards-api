@@ -54,6 +54,8 @@ class RepInfo:
         self.house['picture'] = self.__houseInfo['depiction']['imageUrl']
         self.house['bio']['full_name'] = self.__houseInfo['directOrderName']
         self.house['state'] = self.__houseInfo['state']
+        self.house['sponsoredLegislation'] = self.__houseInfo['sponsoredLegislation']
+        self.house['cosponsoredLegislation'] = self.__houseInfo['cosponsoredLegislation']
         self.house['terms'] = self.__houseInfo['terms']
         self.house['typeSince'] = self.__findYearOfOffice(self.house)
 
@@ -67,6 +69,8 @@ class RepInfo:
             self.senate1['picture'] = self.__senate1Info['depiction']['imageUrl']
             self.senate1['bio']['full_name'] = self.__senate1Info['directOrderName']
             self.senate1['state'] = self.__senate1Info['state']
+            self.senate1['sponsoredLegislation'] = self.__senate1Info['sponsoredLegislation']
+            self.senate1['cosponsoredLegislation'] = self.__senate1Info['cosponsoredLegislation']
             self.senate1['terms'] = self.__senate1Info['terms']
             self.senate1['typeSince'] = self.__findYearOfOffice(self.senate1)
 
@@ -74,6 +78,8 @@ class RepInfo:
             self.senate2['picture'] = self.__senate2Info['depiction']['imageUrl']
             self.senate2['bio']['full_name'] = self.__senate2Info['directOrderName']
             self.senate2['state'] = self.__senate2Info['state']
+            self.senate2['sponsoredLegislation'] = self.__senate2Info['sponsoredLegislation']
+            self.senate2['cosponsoredLegislation'] = self.__senate2Info['cosponsoredLegislation']
             self.senate2['terms'] = self.__senate2Info['terms']
             self.senate2['typeSince'] = self.__findYearOfOffice(self.senate2)
 
