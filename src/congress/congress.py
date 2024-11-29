@@ -6,6 +6,7 @@ from flask_restful import Api, Resource, reqparse
 import requests
 import json
 import os
+from enum import Enum
 
 from geocodio import GeocodioClient
 
@@ -25,6 +26,10 @@ client = GeocodioClient(GEO_KEY)
 # make json -> dict work. Is there a better way?
 true = True
 null = None
+
+class LegislationTypeEnum(Enum):
+    SPONSORED = 1
+    COSPONSORED = 2
 
 class RepInfo:
     # nice to have
@@ -54,8 +59,8 @@ class RepInfo:
         self.house['picture'] = self.__houseInfo['depiction']['imageUrl']
         self.house['bio']['full_name'] = self.__houseInfo['directOrderName']
         self.house['state'] = self.__houseInfo['state']
-        self.house['sponsoredLegislation'] = self.__houseInfo['sponsoredLegislation']
-        self.house['cosponsoredLegislation'] = self.__houseInfo['cosponsoredLegislation']
+        self.house['sponsoredLegislationCount'] = self.__houseInfo['sponsoredLegislation']['count']
+        self.house['cosponsoredLegislationCount'] = self.__houseInfo['cosponsoredLegislation']['count']
         self.house['terms'] = self.__houseInfo['terms']
         self.house['typeSince'] = self.__findYearOfOffice(self.house)
 
@@ -69,8 +74,8 @@ class RepInfo:
             self.senate1['picture'] = self.__senate1Info['depiction']['imageUrl']
             self.senate1['bio']['full_name'] = self.__senate1Info['directOrderName']
             self.senate1['state'] = self.__senate1Info['state']
-            self.senate1['sponsoredLegislation'] = self.__senate1Info['sponsoredLegislation']
-            self.senate1['cosponsoredLegislation'] = self.__senate1Info['cosponsoredLegislation']
+            self.senate1['sponsoredLegislationCount'] = self.__senate1Info['sponsoredLegislation']['count']
+            self.senate1['cosponsoredLegislationCount'] = self.__senate1Info['cosponsoredLegislation']['count']
             self.senate1['terms'] = self.__senate1Info['terms']
             self.senate1['typeSince'] = self.__findYearOfOffice(self.senate1)
 
@@ -78,8 +83,8 @@ class RepInfo:
             self.senate2['picture'] = self.__senate2Info['depiction']['imageUrl']
             self.senate2['bio']['full_name'] = self.__senate2Info['directOrderName']
             self.senate2['state'] = self.__senate2Info['state']
-            self.senate2['sponsoredLegislation'] = self.__senate2Info['sponsoredLegislation']
-            self.senate2['cosponsoredLegislation'] = self.__senate2Info['cosponsoredLegislation']
+            self.senate2['sponsoredLegislationCount'] = self.__senate2Info['sponsoredLegislation']['count']
+            self.senate2['cosponsoredLegislationCount'] = self.__senate2Info['cosponsoredLegislation']['count']
             self.senate2['terms'] = self.__senate2Info['terms']
             self.senate2['typeSince'] = self.__findYearOfOffice(self.senate2)
 
@@ -109,6 +114,14 @@ class RepInfo:
         # get extra information from api.congress.gov. Not super helpful now, but will use this API
         #   to get bill information
         return eval(congress.get(CONGRESS_API + '/member/' + bioguideId).content)['member']
+
+    def __getMemberLegislation(self, bioguideId, legislationType):
+        if legislationType == LegislationTypeEnum.SPONSORED:
+            return eval(congress.get(CONGRESS_API + '/member/' + bioguideId + '/' + 'sponsored-legislation?limit=10').content)['sponsoredLegislation']
+        elif legislationType == LegislationTypeEnum.COSPONSORED:
+            return eval(congress.get(CONGRESS_API + '/member/' + bioguideId + '/' + 'cosponsored-legislation?limit=10').content)['cosponsoredLegislation']
+        # else:
+        #     return [ ]
 
 # add api endpoint
 class Congress(Resource):
