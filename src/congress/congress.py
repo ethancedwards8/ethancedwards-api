@@ -87,11 +87,12 @@ class RepInfo:
     # so I get the info myself by looping through his list to find when it changes
     # this is helpful for reps who have moved from house to senate or vice versa
     def __findYearOfOffice(self, rep):
-        currentOffice = rep['type']
+        # check chamber instead of rep type because some territories (PR, DC) have delegates or commissioners instead of reps
+        currentChamber = 'House of Representatives' if (rep['type'] == 'Representative') else 'Senate'
         n = 0
         # start at end of list and move back to see when it changes
         for i in reversed(rep['terms']):
-            if i['memberType'] == currentOffice:
+            if i['chamber'] == currentChamber:
                 n = n + 1
     
         return(rep['terms'][len(rep['terms']) - n]['startYear'])
