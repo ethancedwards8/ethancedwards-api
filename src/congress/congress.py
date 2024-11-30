@@ -20,6 +20,7 @@ congress = requests.Session()
 congress.params = { "format": "json" }
 congress.headers.update({ "x-api-key": CONGRESS_KEY })
 
+# setup requests to FEC campgain finance api
 FEC_API = "https://api.open.fec.gov/v1"
 fec = requests.Session()
 fec.params = { "format": "json" }
@@ -48,59 +49,32 @@ class RepInfo:
         self.ocd_id = ocd_id
         # needed later for data retrieval
         self.address = address
-        self.house = reps[0]
+        self.house = RepInfo.reshapeLegislatorInfo(reps[0])
 
         # for DC, PR, territories, etc, who don't have senators
         if len(reps) > 1:
-            self.senate1 = reps[1]
-            self.senate2 = reps[2]
+            self.senate1 = RepInfo.reshapeLegislatorInfo(reps[1])
+            self.senate2 = RepInfo.reshapeLegislatorInfo(reps[2])
 
-        self.__addExtra(reps)
 
-    # add picture and term information from congress API
-    def __addExtra(self, reps):
+    @staticmethod
+    def reshapeLegislatorInfo(legislator):
         # storing the object to reduce the amount of requests needed
-        self.__houseInfo = RepInfo.getMemberInfo(self.house['references']['bioguide_id'])
+        legislatorInfo = RepInfo.getMemberInfo(legislator['references']['bioguide_id'])
 
         # add pictures and terms of each member
-        self.house['type'] = self.house['type'].capitalize()
-        self.house['picture'] = self.__houseInfo['depiction']['imageUrl']
-        self.house['bio']['full_name'] = self.__houseInfo['directOrderName']
-        self.house['state'] = self.__houseInfo['state']
-        self.house['sponsoredLegislationCount'] = self.__houseInfo['sponsoredLegislation']['count']
-        self.house['cosponsoredLegislationCount'] = self.__houseInfo['cosponsoredLegislation']['count']
-        self.house['terms'] = self.__houseInfo['terms']
-        self.house['typeSince'] = RepInfo.findYearOfOffice(self.house)
+        legislator['type'] = legislator['type'].capitalize()
+        legislator['picture'] = legislatorInfo['depiction']['imageUrl']
+        legislator['bio']['full_name'] = legislatorInfo['directOrderName']
+        legislator['state'] = legislatorInfo['state']
+        legislator['sponsoredLegislationCount'] = legislatorInfo['sponsoredLegislation']['count']
+        legislator['cosponsoredLegislationCount'] = legislatorInfo['cosponsoredLegislation']['count']
+        legislator['terms'] = legislatorInfo['terms']
+        legislator['typeSince'] = RepInfo.findYearOfOffice(legislator)
 
-        # for DC, PR, territories, etc, who don't have senators
-        if len(reps) > 1:
-            self.__senate1Info = RepInfo.getMemberInfo(self.senate1['references']['bioguide_id'])
-            self.__senate2Info = RepInfo.getMemberInfo(self.senate2['references']['bioguide_id'])
+        # del legislatorInfo
 
-            # add pictures and terms of each member
-            self.senate1['type'] = self.senate1['type'].capitalize()
-            self.senate1['picture'] = self.__senate1Info['depiction']['imageUrl']
-            self.senate1['bio']['full_name'] = self.__senate1Info['directOrderName']
-            self.senate1['state'] = self.__senate1Info['state']
-            self.senate1['sponsoredLegislationCount'] = self.__senate1Info['sponsoredLegislation']['count']
-            self.senate1['cosponsoredLegislationCount'] = self.__senate1Info['cosponsoredLegislation']['count']
-            self.senate1['terms'] = self.__senate1Info['terms']
-            self.senate1['typeSince'] = RepInfo.findYearOfOffice(self.senate1)
-
-            self.senate2['type'] = self.senate2['type'].capitalize()
-            self.senate2['picture'] = self.__senate2Info['depiction']['imageUrl']
-            self.senate2['bio']['full_name'] = self.__senate2Info['directOrderName']
-            self.senate2['state'] = self.__senate2Info['state']
-            self.senate2['sponsoredLegislationCount'] = self.__senate2Info['sponsoredLegislation']['count']
-            self.senate2['cosponsoredLegislationCount'] = self.__senate2Info['cosponsoredLegislation']['count']
-            self.senate2['terms'] = self.__senate2Info['terms']
-            self.senate2['typeSince'] = RepInfo.findYearOfOffice(self.senate2)
-
-            # clean up memory and reduce object json output
-            del self.__senate1Info, self.__senate2Info
-
-        # clean up memory and reduce object json output
-        del self.__houseInfo
+        return legislator
 
     # my data doesn't tell me when the rep started in his office
     # so I get the info myself by looping through his list to find when it changes
@@ -128,7 +102,9 @@ class RepInfo:
     @staticmethod
     def getMemberFinance(state, district, office, year):
         officeLetter = 'H' if office in { 'Representative', 'Resident Commissioner', 'Delegate' } else 'S'
+        # use office info to determine the occupants FEC id. Should be able to remove once Geocodio API changes.
         candidateID = eval(congress.get(FEC_API + '/candidates/search/?page=1&per_page=2&incumbent_challenge=I&sort=-election_years&office=' + officeLetter + '&state=' + state + '&district=' + str(district) + '&election_year=' + str(year)).content)['results'][0]['candidate_id']
+        # use FEC ID to pull latest finance info
         candidateFinances = eval(congress.get(FEC_API + '/candidate/' + candidateID + '/totals').content)['results'][0]
         return candidateFinances
 
@@ -169,9 +145,10 @@ class MemberFetch(Resource):
         rep['finance'] = RepInfo.getMemberFinance(rep['terms'][-1]['stateCode'], rep['terms'][-1]['district'] if 'district' in rep['terms'][-1] else '00', rep['terms'][-1]['memberType'], int(rep['typeSince']) - 1)
         return rep
 
-# testRep = RepInfo(congressReps['name'], congressReps['ocd_id'], congressReps['current_legislators'], '1600 Pennsylvania Ave, Washington DC, DC 20500').toJSON()
 # result = client.geocode('1600 Pennsylvania Ave, Washington DC, DC 20500', fields=['cd'])
 # congressReps = result['results'][0]['fields']['congressional_districts'][0]
+# testRep = RepInfo(congressReps['name'], congressReps['ocd_id'], congressReps['current_legislators'], '1600 Pennsylvania Ave, Washington DC, DC 20500').toJSON()
+# print(json.dumps(testRep))
 # address = result['input']['formatted_address']
 
 # print(json.dumps(RepInfo.getMemberFinance('VA', '00', 'Senate', 2008)))
