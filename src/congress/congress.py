@@ -64,7 +64,7 @@ class RepInfo:
         self.house['sponsoredLegislationCount'] = self.__houseInfo['sponsoredLegislation']['count']
         self.house['cosponsoredLegislationCount'] = self.__houseInfo['cosponsoredLegislation']['count']
         self.house['terms'] = self.__houseInfo['terms']
-        self.house['typeSince'] = self.__findYearOfOffice(self.house)
+        self.house['typeSince'] = RepInfo.findYearOfOffice(self.house)
 
         # for DC, PR, territories, etc, who don't have senators
         if len(reps) > 1:
@@ -79,7 +79,7 @@ class RepInfo:
             self.senate1['sponsoredLegislationCount'] = self.__senate1Info['sponsoredLegislation']['count']
             self.senate1['cosponsoredLegislationCount'] = self.__senate1Info['cosponsoredLegislation']['count']
             self.senate1['terms'] = self.__senate1Info['terms']
-            self.senate1['typeSince'] = self.__findYearOfOffice(self.senate1)
+            self.senate1['typeSince'] = RepInfo.findYearOfOffice(self.senate1)
 
             self.senate2['type'] = self.senate2['type'].capitalize()
             self.senate2['picture'] = self.__senate2Info['depiction']['imageUrl']
@@ -88,7 +88,7 @@ class RepInfo:
             self.senate2['sponsoredLegislationCount'] = self.__senate2Info['sponsoredLegislation']['count']
             self.senate2['cosponsoredLegislationCount'] = self.__senate2Info['cosponsoredLegislation']['count']
             self.senate2['terms'] = self.__senate2Info['terms']
-            self.senate2['typeSince'] = self.__findYearOfOffice(self.senate2)
+            self.senate2['typeSince'] = RepInfo.findYearOfOffice(self.senate2)
 
             # clean up memory and reduce object json output
             del self.__senate1Info, self.__senate2Info
@@ -99,7 +99,8 @@ class RepInfo:
     # my data doesn't tell me when the rep started in his office
     # so I get the info myself by looping through his list to find when it changes
     # this is helpful for reps who have moved from house to senate or vice versa
-    def __findYearOfOffice(self, rep):
+    @staticmethod
+    def findYearOfOffice(rep):
         # check chamber instead of rep type because some territories (PR, DC) have delegates or commissioners instead of reps
         currentChamber = 'House of Representatives' if (rep['type'] == 'Representative') else 'Senate'
         n = 0
@@ -118,7 +119,8 @@ class RepInfo:
         #   to get bill information
         return eval(congress.get(CONGRESS_API + '/member/' + bioguideId).content)['member']
 
-    def __getMemberLegislation(self, bioguideId, legislationType):
+    @staticmethod
+    def getMemberLegislation(bioguideId, legislationType):
         if legislationType == LegislationTypeEnum.SPONSORED:
             return eval(congress.get(CONGRESS_API + '/member/' + bioguideId + '/' + 'sponsored-legislation?limit=10').content)['sponsoredLegislation']
         elif legislationType == LegislationTypeEnum.COSPONSORED:
@@ -146,4 +148,9 @@ class AddressCongress(Resource):
 class MemberFetch(Resource):
     def get(self, bioguide=None):
         # useful for the congressman info page.
-        return RepInfo.getMemberInfo(bioguide);
+        rep = RepInfo.getMemberInfo(bioguide);
+        rep['sponsoredLegislation']['recent'] = RepInfo.getMemberLegislation(bioguide, LegislationTypeEnum.SPONSORED)
+        rep['cosponsoredLegislation']['recent'] = RepInfo.getMemberLegislation(bioguide, LegislationTypeEnum.COSPONSORED)
+        rep['type'] = rep['terms'][-1]['memberType']
+        rep['typeSince'] = RepInfo.findYearOfOffice(rep);
+        return rep;
