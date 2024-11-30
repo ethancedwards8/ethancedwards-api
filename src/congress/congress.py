@@ -102,7 +102,7 @@ class RepInfo:
     @staticmethod
     def findYearOfOffice(rep):
         # check chamber instead of rep type because some territories (PR, DC) have delegates or commissioners instead of reps
-        currentChamber = 'House of Representatives' if (rep['type'] == 'Representative') else 'Senate'
+        currentChamber = 'House of Representatives' if (rep['type'] == 'Representative' or 'Resident Commissioner' or 'Delegate') else 'Senate'
         n = 0
         # start at end of list and move back to see when it changes
         for i in reversed(rep['terms']):
