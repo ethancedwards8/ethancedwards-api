@@ -54,7 +54,7 @@ class RepInfo:
     # add picture and term information from congress API
     def __addExtra(self, reps):
         # storing the object to reduce the amount of requests needed
-        self.__houseInfo = self.__getMemberInfo(self.house['references']['bioguide_id'])
+        self.__houseInfo = RepInfo.getMemberInfo(self.house['references']['bioguide_id'])
 
         # add pictures and terms of each member
         self.house['type'] = self.house['type'].capitalize()
@@ -68,8 +68,8 @@ class RepInfo:
 
         # for DC, PR, territories, etc, who don't have senators
         if len(reps) > 1:
-            self.__senate1Info = self.__getMemberInfo(self.senate1['references']['bioguide_id'])
-            self.__senate2Info = self.__getMemberInfo(self.senate2['references']['bioguide_id'])
+            self.__senate1Info = RepInfo.getMemberInfo(self.senate1['references']['bioguide_id'])
+            self.__senate2Info = RepInfo.getMemberInfo(self.senate2['references']['bioguide_id'])
 
             # add pictures and terms of each member
             self.senate1['type'] = self.senate1['type'].capitalize()
@@ -111,7 +111,8 @@ class RepInfo:
         return(rep['terms'][len(rep['terms']) - n]['startYear'])
 
     # pull info from congress API
-    def __getMemberInfo(self, bioguideId):
+    @staticmethod
+    def getMemberInfo(bioguideId):
         # eval casts the JSON to a dict
         # get extra information from api.congress.gov. Not super helpful now, but will use this API
         #   to get bill information
@@ -126,7 +127,7 @@ class RepInfo:
         #     return [ ]
 
 # add api endpoint
-class Congress(Resource):
+class AddressCongress(Resource):
     def get(self, address=None):
         # error handling if a bad address is inputted
         try:
@@ -141,3 +142,8 @@ class Congress(Resource):
             return "address not valid", 404
 
 
+# add api endpoint
+class MemberFetch(Resource):
+    def get(self, bioguide=None):
+        # useful for the congressman info page.
+        return RepInfo.getMemberInfo(bioguide);
