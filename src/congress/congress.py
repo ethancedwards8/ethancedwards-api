@@ -20,11 +20,17 @@ congress = requests.Session()
 congress.params = { "format": "json" }
 congress.headers.update({ "x-api-key": CONGRESS_KEY })
 
+FEC_API = "https://api.open.fec.gov/v1"
+fec = requests.Session()
+fec.params = { "format": "json" }
+fec.headers.update({ "x-api-key": CONGRESS_KEY })
+
 # setup requests for geocodio
 client = GeocodioClient(GEO_KEY)
 
 # make json -> dict work. Is there a better way?
 true = True
+false = False
 null = None
 
 class LegislationTypeEnum(Enum):
@@ -120,6 +126,13 @@ class RepInfo:
         return eval(congress.get(CONGRESS_API + '/member/' + bioguideId).content)['member']
 
     @staticmethod
+    def getMemberFinance(state, district, office, year):
+        officeLetter = 'H' if office in { 'Representative', 'Resident Commissioner', 'Delegate' } else 'S'
+        candidateID = eval(congress.get(FEC_API + '/candidates/search/?page=1&per_page=2&incumbent_challenge=I&sort=-election_years&office=' + officeLetter + '&state=' + state + '&district=' + str(district) + '&election_year=' + str(year)).content)['results'][0]['candidate_id']
+        candidateFinances = eval(congress.get(FEC_API + '/candidate/' + candidateID + '/totals').content)['results'][0]
+        return candidateFinances
+
+    @staticmethod
     def getMemberLegislation(bioguideId, legislationType):
         if legislationType == LegislationTypeEnum.SPONSORED:
             return eval(congress.get(CONGRESS_API + '/member/' + bioguideId + '/' + 'sponsored-legislation?limit=10').content)['sponsoredLegislation']
@@ -153,10 +166,22 @@ class MemberFetch(Resource):
         rep['cosponsoredLegislation']['recent'] = RepInfo.getMemberLegislation(bioguide, LegislationTypeEnum.COSPONSORED)
         rep['type'] = rep['terms'][-1]['memberType']
         rep['typeSince'] = RepInfo.findYearOfOffice(rep);
-        return rep;
+        rep['finance'] = RepInfo.getMemberFinance(rep['terms'][-1]['stateCode'], rep['terms'][-1]['district'] if 'district' in rep['terms'][-1] else '00', rep['terms'][-1]['memberType'], int(rep['typeSince']) - 1)
+        return rep
 
+# testRep = RepInfo(congressReps['name'], congressReps['ocd_id'], congressReps['current_legislators'], '1600 Pennsylvania Ave, Washington DC, DC 20500').toJSON()
 # result = client.geocode('1600 Pennsylvania Ave, Washington DC, DC 20500', fields=['cd'])
 # congressReps = result['results'][0]['fields']['congressional_districts'][0]
 # address = result['input']['formatted_address']
 
-# print(json.dumps(RepInfo(congressReps['name'], congressReps['ocd_id'], congressReps['current_legislators'], '1600 Pennsylvania Ave, Washington DC, DC 20500').toJSON()))
+# print(json.dumps(RepInfo.getMemberFinance('VA', '00', 'Senate', 2008)))
+
+# bioguide = 'P000610'
+# testRep = RepInfo.getMemberInfo(bioguide)
+# testRep['sponsoredLegislation']['recent'] = RepInfo.getMemberLegislation(bioguide, LegislationTypeEnum.SPONSORED)
+# testRep['cosponsoredLegislation']['recent'] = RepInfo.getMemberLegislation(bioguide, LegislationTypeEnum.COSPONSORED)
+# testRep['type'] = testRep['terms'][-1]['memberType']
+# testRep['typeSince'] = RepInfo.findYearOfOffice(testRep);
+# testRep['finance'] = RepInfo.getMemberFinance(testRep['terms'][-1]['stateCode'], testRep['terms'][-1]['district'] if 'district' in testRep['terms'][-1] else '00', testRep['terms'][-1]['memberType'], int(testRep['typeSince']) - 1)
+
+# print(testRep['finance'])
