@@ -102,7 +102,7 @@ class RepInfo:
     @staticmethod
     def findYearOfOffice(rep):
         # check chamber instead of rep type because some territories (PR, DC) have delegates or commissioners instead of reps
-        currentChamber = 'House of Representatives' if (rep['type'] == 'Representative' or 'Resident Commissioner' or 'Delegate') else 'Senate'
+        currentChamber = 'House of Representatives' if ((rep['type'] in { 'Representative', 'Resident Commissioner', 'Delegate' })) else 'Senate'
         n = 0
         # start at end of list and move back to see when it changes
         for i in reversed(rep['terms']):
@@ -154,3 +154,9 @@ class MemberFetch(Resource):
         rep['type'] = rep['terms'][-1]['memberType']
         rep['typeSince'] = RepInfo.findYearOfOffice(rep);
         return rep;
+
+# result = client.geocode('1600 Pennsylvania Ave, Washington DC, DC 20500', fields=['cd'])
+# congressReps = result['results'][0]['fields']['congressional_districts'][0]
+# address = result['input']['formatted_address']
+
+# print(json.dumps(RepInfo(congressReps['name'], congressReps['ocd_id'], congressReps['current_legislators'], '1600 Pennsylvania Ave, Washington DC, DC 20500').toJSON()))
