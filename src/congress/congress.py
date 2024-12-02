@@ -142,7 +142,7 @@ class MemberFetch(Resource):
         rep['cosponsoredLegislation']['recent'] = RepInfo.getMemberLegislation(bioguide, LegislationTypeEnum.COSPONSORED)
         rep['type'] = rep['terms'][-1]['memberType']
         rep['typeSince'] = RepInfo.findYearOfOffice(rep);
-        rep['finance'] = RepInfo.getMemberFinance(rep['terms'][-1]['stateCode'], rep['terms'][-1]['district'] if 'district' in rep['terms'][-1] else '00', rep['terms'][-1]['memberType'], int(rep['typeSince']) - 1)
+        # rep['finance'] = RepInfo.getMemberFinance(rep['terms'][-1]['stateCode'], rep['terms'][-1]['district'] if 'district' in rep['terms'][-1] else '00', rep['terms'][-1]['memberType'], int(rep['typeSince']) - 1)
         return rep
 
 # result = client.geocode('1600 Pennsylvania Ave, Washington DC, DC 20500', fields=['cd'])
