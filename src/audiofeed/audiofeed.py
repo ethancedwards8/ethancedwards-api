@@ -15,7 +15,7 @@ ydl_opts = {
     # ℹ️ See help(yt_dlp.postprocessor) for a list of available Postprocessors and their arguments
     'postprocessors': [{  # Extract audio using ffmpeg
         'key': 'FFmpegExtractAudio',
-        'preferredcodec': 'mp3',
+        'preferredcodec': 'm4a',
     }],
     "outtmpl": currentDir + '/static/' + '%(id)s.%(ext)s'
 }
@@ -40,26 +40,21 @@ def updateFile(feed):
 parser = reqparse.RequestParser()
 parser.add_argument('link', required=True, type=str, location='args')
 
-linkList = [ ]
-
-fields = {
-        'link': fields.Url()
-}
-
 class AudioFeed(Resource):
     def get(self):
-        return linkList
+        temp = [ ]
+        for episode in feed.episodes:
+            temp.append(episode.title)
+        return temp
 
     def post(self):
         args = parser.parse_args()
 
         link = args['link']
 
-        linkList.append(link)
-
         info_dict = ydl.extract_info(link, download=True)
 
-        media_file = 'https://api.ethancedwards.com/static/' + info_dict['id'] + '.mp3'
+        media_file = 'https://api.ethancedwards.com/static/' + info_dict['id'] + '.m4a'
 
         feed.episodes += [
                 Episode(title=info_dict['title'],
@@ -69,4 +64,4 @@ class AudioFeed(Resource):
 
         updateFile(feed)
         
-        return {"message": "success"}, 200
+        return {"message": "success, added episode " + info_dict['title']}, 200
