@@ -6,6 +6,7 @@ import yt_dlp
 
 import json
 import os
+import sys
 
 ydl_opts = {
     'format': 'm4a/bestaudio/best',
@@ -14,7 +15,7 @@ ydl_opts = {
         'key': 'FFmpegExtractAudio',
         'preferredcodec': 'mp3',
     }],
-    "outtmpl": 'src/static/' + '%(id)s.%(ext)s'
+    "outtmpl": os.path.dirname(sys.argv[0]) + '/static/' + '%(id)s.%(ext)s'
 }
 
 ydl = yt_dlp.YoutubeDL(ydl_opts)
