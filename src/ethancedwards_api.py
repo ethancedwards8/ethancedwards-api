@@ -14,7 +14,7 @@ from podcast.podcast import *
 from congress.congress import *
 from audiofeed.audiofeed import *
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
 api = Api(app)
 DEV = os.environ.get('DEV')
 
@@ -37,7 +37,7 @@ api.add_resource(PodcastDump, "/podcast/v1/dump", "/podcast/v1/dump/")
 api.add_resource(AddressCongress, "/congress/v1/address/<string:address>", "/congress/v1/address/<string:address>/")
 api.add_resource(MemberFetch, "/congress/v1/member/<string:bioguide>", "/congress/v1/member/<string:bioguide>/")
 
-api.add_resource(AudioFeed, "/audiofeed/v1/<string:link>", "/audiofeed/v1/<string:link>/")
+api.add_resource(AudioFeed, "/audiofeed/v1")
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=(8000 if DEV else 80))
