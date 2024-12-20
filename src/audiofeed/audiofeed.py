@@ -8,6 +8,8 @@ import json
 import os
 import sys
 
+currentDir = os.path.dirname(sys.argv[0])
+
 ydl_opts = {
     'format': 'm4a/bestaudio/best',
     # ℹ️ See help(yt_dlp.postprocessor) for a list of available Postprocessors and their arguments
@@ -15,7 +17,7 @@ ydl_opts = {
         'key': 'FFmpegExtractAudio',
         'preferredcodec': 'mp3',
     }],
-    "outtmpl": os.path.dirname(sys.argv[0]) + '/static/' + '%(id)s.%(ext)s'
+    "outtmpl": currentDir + '/static/' + '%(id)s.%(ext)s'
 }
 
 ydl = yt_dlp.YoutubeDL(ydl_opts)
@@ -32,7 +34,7 @@ feed = podgen.Podcast(name="Ethan's Misc. Listening",
 
 
 def updateFile(feed):
-    with open('src/static/feed.xml', 'w') as feed_file:
+    with open(currentDir + '/static/feed.xml', 'w') as feed_file:
         feed_file.write(feed.rss_str())
 
 parser = reqparse.RequestParser()
