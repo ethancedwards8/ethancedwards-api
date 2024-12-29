@@ -15,21 +15,21 @@ class Episode:
     def toJSON(self):
         return self.__dict__
 
-podcast = [ ]
-
-count = len(podcast)
-
 def getEps():
     print("request made")
     feed = feedparser.parse(URL)
+    podcast = [ ]
     i = len(feed.entries)
     for entry in feed.entries:
         podcast.append(Episode(i, entry.title, entry.published, entry.link).toJSON())
         i -= 1
 
+    return podcast
+
 class Podcast(Resource):
     def get(self, id=0):
-        getEps()
+        podcast = getEps()
+        count = len(podcast)
         # podcast/v1/0 returns a random episode
         if id == 0:
             return random.choice(podcast), 200
@@ -43,7 +43,7 @@ class Podcast(Resource):
 
 class PodcastDump(Resource):
     def get(self):
-        getEps()
+        podcast = getEps()
         # returns list of all podcasts
         return podcast, 200
 
