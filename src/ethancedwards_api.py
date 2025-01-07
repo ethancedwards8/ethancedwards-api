@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-
 # Flask imports
 from flask import Flask
 from flask_restful import Api, Resource, reqparse

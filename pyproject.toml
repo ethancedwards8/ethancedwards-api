@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "ethancedwards-api"
+version = "0.1.0"
+description = "Internal API for my needs"
+authors = ["Ethan Carter Edwards <ethan@ethancedwards.com>"]
+readme = "README.md"
+packages = [{include = "ethancedwards_api", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+flask = "^3.1.0"
+flask-restful = "^0.3.10"
+yt-dlp = "^2024.12.23"
+podgen = "^1.1.0"
+feedparser = "^6.0.11"
+pygeocodio = "^1.4.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -1,3 +1,5 @@
-/result/
+result
+dist
+.direnv/
 __pycache__
 CONSTANTS
