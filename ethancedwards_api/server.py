@@ -40,3 +40,6 @@ def main():
     api.add_resource(AudioFeed, "/audiofeed/v1")
     
     app.run(host='0.0.0.0', port=(8000 if DEV else 80))
+
+if __name__ == '__main__':
+    main()

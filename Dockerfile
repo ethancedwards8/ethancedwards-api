@@ -1,6 +1,7 @@
 FROM python:alpine
 
-RUN apk update && apk add --no-cache ffmpeg
-RUN pip3 install flask flask-restful feedparser requests pygeocodio yt-dlp podgen
+RUN apk update && apk add --no-cache ffmpeg poetry
+WORKDIR /app
 COPY . /app
-ENTRYPOINT ["python3", "/app/src/ethancedwards_api.py"]
+RUN poetry install
+ENTRYPOINT ["poetry", "run", "start"]
