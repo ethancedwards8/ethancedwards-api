@@ -28,6 +28,9 @@
           dependencies = with pkgs.python3Packages; [
             flask-restful
             flask
+            feedparser
+            yt-dlp
+            # add pygeocodio and podgen
           ];
         }
       );

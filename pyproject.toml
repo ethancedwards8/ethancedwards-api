@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Internal API for my needs"
 authors = ["Ethan Carter Edwards <ethan@ethancedwards.com>"]
 readme = "README.md"
-packages = [{include = "ethancedwards_api", from = "src"}]
+packages = [{include = "ethancedwards_api"}]
 
 [tool.poetry.dependencies]
 python = "^3.12"
@@ -14,6 +14,9 @@ yt-dlp = "^2024.12.23"
 podgen = "^1.1.0"
 feedparser = "^6.0.11"
 pygeocodio = "^1.4.0"
+
+[tool.poetry.scripts]
+start = "ethancedwards_api:main"
 
 [build-system]
 requires = ["poetry-core"]
