@@ -3,3 +3,9 @@ Code:
 
 Docker:
 - reduce size!!!
+
+lkml-rs:
+- api served here
+- rust crate
+- cli tool to search lkml (and assoc. lists)
+    - optionally download lkml and search locally

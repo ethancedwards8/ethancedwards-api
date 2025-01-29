@@ -3,3 +3,8 @@ dist
 .direnv/
 __pycache__
 CONSTANTS
+
+
+# Added by cargo
+
+/target
