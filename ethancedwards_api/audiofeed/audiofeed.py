@@ -25,6 +25,8 @@ ydl = yt_dlp.YoutubeDL(ydl_opts)
 def downloadAudio(link):
     ydl.download(link)
 
+# https://stackoverflow.com/questions/74188289/how-do-i-parse-xml-rss-feed-content-in-python
+# import after restart sol. maybe? will try later
 feed = podgen.Podcast(name="Ethan's Misc. Listening", 
                         description="Things that Ethan wants to listen to",
                         website="https://ethancedwards.com",

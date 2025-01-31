@@ -14,6 +14,7 @@ yt-dlp = "^2024.12.23"
 podgen = "^1.1.0"
 feedparser = "^6.0.11"
 pygeocodio = "^1.4.0"
+python-jobspy = "^1.1.76"
 
 [tool.poetry.scripts]
 start = "ethancedwards_api:main"
