@@ -6,6 +6,15 @@ from flask_restful import Api, Resource, reqparse
 from jobspy import scrape_jobs
 
 import json, csv, os
+import base64
+
+parser = reqparse.RequestParser()
+parser.add_argument('job_url', required=False, type=str, location='args')
+parser.add_argument('title', required=True, type=str, location='args')
+parser.add_argument('company', required=True, type=str, location='args')
+parser.add_argument('location', required=True, type=str, location='args')
+parser.add_argument('date_posted', required=True, type=str, location='args')
+parser.add_argument('description', required=True, type=str, location='args')
 
 jobs = [ ]
 
@@ -39,9 +48,32 @@ class JobsList(Resource):
         except:
             return [ ]
 
-    # def post(self):
-    #     args = parser.parse_args()
+    def post(self):
+        args = parser.parse_args()
 
+        job = {
+            'id': f"cm-{str(hash(args['title'] + args['company']))}",
+            'job_url': args.get('job_url') or '',
+            'title': args['title'],
+            'company': args['company'],
+            'location': args['location'],
+            'date_posted': args['date_posted'],
+            'description': args['description']
+        }
+
+        tmp = []
+        if os.path.exists('data.json'):
+            with open('data.json', 'r', encoding='utf-8') as file:
+                tmp = json.load(file)
+                # append the new jobs to the existing ones
+                tmp.append(job)
+        else:
+            tmp = job
+
+        with open('data.json', 'w', encoding='utf-8') as file:
+            json.dump(tmp, file, indent=4)
+
+        return job
 
 
 class RefreshJobs(Resource):
@@ -52,6 +84,7 @@ class RefreshJobs(Resource):
         if os.path.exists('data.json'):
             with open('data.json', 'r', encoding='utf-8') as file:
                 tmp = json.load(file)
+                # append the new jobs to the existing ones
                 tmp += jobs
         else:
             tmp = jobs
