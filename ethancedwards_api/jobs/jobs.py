@@ -10,13 +10,16 @@ import base64
 
 currentDir = os.path.dirname(sys.argv[0]) + '/static'
 
-parser = reqparse.RequestParser()
-parser.add_argument('job_url', required=False, type=str, location='args')
-parser.add_argument('title', required=True, type=str, location='args')
-parser.add_argument('company', required=True, type=str, location='args')
-parser.add_argument('location', required=True, type=str, location='args')
-parser.add_argument('date_posted', required=True, type=str, location='args')
-parser.add_argument('description', required=True, type=str, location='args')
+post = reqparse.RequestParser()
+post.add_argument('job_url', required=False, type=str, location='args')
+post.add_argument('title', required=True, type=str, location='args')
+post.add_argument('company', required=True, type=str, location='args')
+post.add_argument('location', required=True, type=str, location='args')
+post.add_argument('date_posted', required=True, type=str, location='args')
+post.add_argument('description', required=True, type=str, location='args')
+
+delete = reqparse.RequestParser()
+delete.add_argument('id', required=True, type=str, location='args')
 
 jobs = [ ]
 
@@ -51,7 +54,7 @@ class JobsList(Resource):
             return [ ]
 
     def post(self):
-        args = parser.parse_args()
+        args = post.parse_args()
 
         job = {
             'id': f"cm-{str(hash(args['title'] + args['company']))}",
@@ -76,6 +79,37 @@ class JobsList(Resource):
             json.dump(tmp, file, indent=4)
 
         return job
+
+    def delete(self):
+        args = delete.parse_args()
+
+        ret = 0
+
+        id = args['id']
+
+        # pull data out of file
+        if os.path.exists(currentDir + '/data.json'):
+            with open(currentDir + '/data.json', 'r', encoding='utf-8') as file:
+                jobs = json.load(file)
+
+        print(len(jobs))
+        for i in range(len(jobs)):
+            # find the id request in my list
+            if jobs[i]['id'] == id:
+                print(f"{i} is {id} in {jobs[i]['title']}")
+                ret = jobs[i]
+                del jobs[i]
+                # so that we only delete the first element that we find. Maybe should be last?
+                break
+
+        # put data into file
+        with open(currentDir + '/data.json', 'w', encoding='utf-8') as file:
+            json.dump(jobs, file, indent=4)
+
+        if ret:
+            return ret, 200
+        else:
+            return "sorry, id not found", 404
 
 
 class RefreshJobs(Resource):
