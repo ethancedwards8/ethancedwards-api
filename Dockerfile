@@ -1,8 +1,8 @@
-FROM python:alpine
+FROM python
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-RUN apk update && apk add --no-cache ffmpeg uv clang gcompat
+RUN apt-get update && apt-get -y install ffmpeg && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
-COPY ./pyproject.toml ./README.md /app/
-RUN uv sync
 COPY . /app
-CMD ["uv", "run", "start"]
+RUN uv sync
+ENTRYPOINT ["uv", "run", "start"]
