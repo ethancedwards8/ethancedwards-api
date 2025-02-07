@@ -5,8 +5,10 @@ from flask_restful import Api, Resource, reqparse
 
 from jobspy import scrape_jobs
 
-import json, csv, os
+import json, csv, os, sys
 import base64
+
+currentDir = os.path.dirname(sys.argv[0]) + '/static'
 
 parser = reqparse.RequestParser()
 parser.add_argument('job_url', required=False, type=str, location='args')
@@ -28,10 +30,10 @@ def scrapeJobs():
         country_indeed='USA',
     )
 
-    jobs.to_csv("jobs.csv", quoting=csv.QUOTE_NONNUMERIC, escapechar="\\", index=False) # to_excel
+    jobs.to_csv(currentDir + "/jobs.csv", quoting=csv.QUOTE_NONNUMERIC, escapechar="\\", index=False) # to_excel
 
     # is there an easier way to go straight to json?
-    with open('jobs.csv', 'r') as csv_file:
+    with open(currentDir + '/jobs.csv', 'r') as csv_file:
         csv_reader = csv.DictReader(csv_file)
         json_data = []
         for row in csv_reader:
@@ -43,7 +45,7 @@ def scrapeJobs():
 class JobsList(Resource):
     def get(self, jobtype=None):
         try:
-            with open('data.json', 'r', encoding='utf-8') as file:
+            with open(currentDir + '/data.json', 'r', encoding='utf-8') as file:
                 return json.load(file)
         except:
             return [ ]
@@ -62,15 +64,15 @@ class JobsList(Resource):
         }
 
         tmp = []
-        if os.path.exists('data.json'):
-            with open('data.json', 'r', encoding='utf-8') as file:
+        if os.path.exists(currentDir + '/data.json'):
+            with open(currentDir + '/data.json', 'r', encoding='utf-8') as file:
                 tmp = json.load(file)
                 # append the new jobs to the existing ones
                 tmp.append(job)
         else:
             tmp = job
 
-        with open('data.json', 'w', encoding='utf-8') as file:
+        with open(currentDir + '/data.json', 'w', encoding='utf-8') as file:
             json.dump(tmp, file, indent=4)
 
         return job
@@ -81,16 +83,16 @@ class RefreshJobs(Resource):
         jobs = scrapeJobs()
 
         tmp = []
-        if os.path.exists('data.json'):
-            with open('data.json', 'r', encoding='utf-8') as file:
+        if os.path.exists(currentDir + '/data.json'):
+            with open(currentDir + '/data.json', 'r', encoding='utf-8') as file:
                 tmp = json.load(file)
                 # append the new jobs to the existing ones
                 tmp += jobs
         else:
             tmp = jobs
 
-        with open('data.json', 'w', encoding='utf-8') as file:
+        with open(currentDir + '/data.json', 'w', encoding='utf-8') as file:
             json.dump(tmp, file, indent=4)
         return f"jobs scraped: {len(jobs)}. Total {len(tmp)}", 200
 
-# class HardReset TODO: beware will remove it all
+# class HardReset TODO: beware will remove it all maybe PURGE would be better?
