@@ -5,4 +5,4 @@ WORKDIR /app
 COPY ./pyproject.toml ./README.md /app/
 RUN uv sync
 COPY . /app
-ENTRYPOINT ["uv", "run", "start"]
+CMD ["uv", "run", "start"]
