@@ -103,5 +103,15 @@
         "id": 20,
         "author": "Richard P. Feynman",
         "quote": "Study hard what interests you the most in the most undisciplined, irreverent and original manner possible."
+    },
+    {
+        "id": 21,
+        "author": "Noam Chomsky",
+        "quote": "If we do not believe in freedom of speech for those we despise, we do not believe in it at all."
+    },
+    {
+        "id": 22,
+        "author": "Noam Chomsky",
+        "quote": "I was never aware of any other option but to question everything."
     }
 ]
