@@ -21,8 +21,6 @@ post.add_argument('description', required=True, type=str, location='args')
 delete = reqparse.RequestParser()
 delete.add_argument('id', required=True, type=str, location='args')
 
-jobs = [ ]
-
 def scrapeJobs():
     jobs = scrape_jobs(
         site_name=["indeed", "linkedin", "zip_recruiter", "glassdoor"],
