@@ -1,1 +1,17 @@
 .venv
+CONSTANTS
+TODO
+__pycache__
+.direnv
+result
+dist
+.direnv/
+__pycache__
+CONSTANTS
+data.json
+jobs.csv
+
+
+# Added by cargo
+
+/target

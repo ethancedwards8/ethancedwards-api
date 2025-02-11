@@ -2,7 +2,7 @@ Code:
 - Fix audiofeed import
 
 Docker:
-- reduce size!!!
+- reduce size!!! https://docs.astral.sh/uv/guides/integration/docker/#optimizations
 
 lkml-rs:
 - api served here
