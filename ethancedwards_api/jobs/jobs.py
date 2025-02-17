@@ -23,7 +23,7 @@ delete.add_argument('id', required=True, type=str, location='args')
 
 def scrapeJobs():
     jobs = scrape_jobs(
-        site_name=["indeed", "linkedin", "zip_recruiter", "glassdoor"],
+        site_name=["indeed", "linkedin", "glassdoor"],
         # search_term=jobtype,
         location="Hillsville, VA",
         results_wanted=10,
