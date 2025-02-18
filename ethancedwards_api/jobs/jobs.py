@@ -17,10 +17,14 @@ post.add_argument('company', required=True, type=str, location='args')
 post.add_argument('location', required=True, type=str, location='args')
 post.add_argument('date_posted', required=True, type=str, location='args')
 post.add_argument('custom_description', required=False, type=str, location='args')
-post.add_argument('approved', required=False, type=int, location='args')
+post.add_argument('approved', required=False, type=json.loads, location='args')
 
 delete = reqparse.RequestParser()
 delete.add_argument('id', required=True, type=str, location='args')
+
+patch = reqparse.RequestParser()
+patch.add_argument('id', required=True, type=str, location='args')
+patch.add_argument('approved', required=True, type=json.loads, location='args')
 
 def scrapeJobs():
     jobs = scrape_jobs(
@@ -63,7 +67,7 @@ class JobsList(Resource):
             'location': args['location'],
             'date_posted': args['date_posted'],
             'custom_description': args['custom_description'],
-            'approved': args['approved'] or 0
+            'approved': args['approved'] or False
         }
 
         tmp = []
@@ -79,6 +83,29 @@ class JobsList(Resource):
             json.dump(tmp, file, indent=4)
 
         return job
+
+    def patch(self):
+        args = patch.parse_args()
+
+        id = args['id']
+        approved = args['approved']
+
+        tmp = []
+        if os.path.exists(currentDir + '/data.json'):
+            with open(currentDir + '/data.json', 'r', encoding='utf-8') as file:
+                tmp = json.load(file)
+
+        patched_job = {}
+
+        for job in tmp:
+            if id == job['id']:
+                job['approved'] = approved
+                patched_job = job
+
+        with open(currentDir + '/data.json', 'w', encoding='utf-8') as file:
+            json.dump(tmp, file, indent=4)
+
+        return patched_job
 
     def delete(self):
         args = delete.parse_args()
