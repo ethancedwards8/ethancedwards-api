@@ -16,7 +16,7 @@ post.add_argument('title', required=True, type=str, location='args')
 post.add_argument('company', required=True, type=str, location='args')
 post.add_argument('location', required=True, type=str, location='args')
 post.add_argument('date_posted', required=True, type=str, location='args')
-post.add_argument('description', required=True, type=str, location='args')
+post.add_argument('custom_description', required=False, type=str, location='args')
 
 delete = reqparse.RequestParser()
 delete.add_argument('id', required=True, type=str, location='args')
@@ -61,7 +61,7 @@ class JobsList(Resource):
             'company': args['company'],
             'location': args['location'],
             'date_posted': args['date_posted'],
-            'description': args['description']
+            'custom_description': args['custom_description']
         }
 
         tmp = []
@@ -71,7 +71,7 @@ class JobsList(Resource):
                 # append the new jobs to the existing ones
                 tmp.append(job)
         else:
-            tmp = job
+            tmp.append(job)
 
         with open(currentDir + '/data.json', 'w', encoding='utf-8') as file:
             json.dump(tmp, file, indent=4)
@@ -114,17 +114,31 @@ class RefreshJobs(Resource):
     def get(self):
         jobs = scrapeJobs()
 
+        simple_jobs = []
+
+        for job in jobs:
+            new_job = {
+                'id': job['id'],
+                'job_url': job['job_url'],
+                'title': job['title'],
+                'company': job['company'],
+                'location': job['location'],
+                'date_posted': job['date_posted'],
+            }
+
+            simple_jobs.append(new_job)
+
         tmp = []
         if os.path.exists(currentDir + '/data.json'):
             with open(currentDir + '/data.json', 'r', encoding='utf-8') as file:
                 tmp = json.load(file)
                 # append the new jobs to the existing ones
-                tmp += jobs
+                tmp += simple_jobs
         else:
-            tmp = jobs
+            tmp = simple_jobs
 
         with open(currentDir + '/data.json', 'w', encoding='utf-8') as file:
             json.dump(tmp, file, indent=4)
-        return f"jobs scraped: {len(jobs)}. Total {len(tmp)}", 200
+        return f"jobs scraped: {len(simple_jobs)}. Total {len(tmp)}", 200
 
 # class HardReset TODO: beware will remove it all maybe PURGE would be better?
