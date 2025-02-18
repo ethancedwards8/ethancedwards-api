@@ -17,6 +17,7 @@ post.add_argument('company', required=True, type=str, location='args')
 post.add_argument('location', required=True, type=str, location='args')
 post.add_argument('date_posted', required=True, type=str, location='args')
 post.add_argument('custom_description', required=False, type=str, location='args')
+post.add_argument('approved', required=False, type=int, location='args')
 
 delete = reqparse.RequestParser()
 delete.add_argument('id', required=True, type=str, location='args')
@@ -61,7 +62,8 @@ class JobsList(Resource):
             'company': args['company'],
             'location': args['location'],
             'date_posted': args['date_posted'],
-            'custom_description': args['custom_description']
+            'custom_description': args['custom_description'],
+            'approved': args['approved'] or 0
         }
 
         tmp = []
@@ -114,7 +116,7 @@ class RefreshJobs(Resource):
     def get(self):
         jobs = scrapeJobs()
 
-        simple_jobs = []
+        small_jobs = []
 
         for job in jobs:
             new_job = {
@@ -124,9 +126,23 @@ class RefreshJobs(Resource):
                 'company': job['company'],
                 'location': job['location'],
                 'date_posted': job['date_posted'],
+                # all auto jobs are automatically approved
+                'approved': True
             }
 
-            simple_jobs.append(new_job)
+            small_jobs.append(new_job)
+
+        # failure at deduplication
+        # seen_jobs = set()
+        # simple_jobs = []
+        # for job in small_jobs:
+        #     if job['id'] not in seen_jobs:
+        #         simple_jobs.append(job)
+        #         seen_jobs.add(job['id'])
+
+        # print(seen_jobs)
+
+        simple_jobs = small_jobs
 
         tmp = []
         if os.path.exists(currentDir + '/data.json'):
