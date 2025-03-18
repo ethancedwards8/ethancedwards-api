@@ -62,7 +62,7 @@
     {
         "id": 12,
         "author": "Richard Stallman",
-        "quote": "Value your freedom or you will lose it, teaches history"
+        "quote": "Value your freedom or you will lose it, teaches history."
     },
     {
         "id": 13,
@@ -113,5 +113,15 @@
         "id": 22,
         "author": "Noam Chomsky",
         "quote": "I was never aware of any other option but to question everything."
+    },
+    {
+        "id": 23,
+        "author": "Spock",
+        "quote": "Live Long and Prosper."
+    },
+    {
+        "id": 24,
+        "author": "Obi-Wan Kenobi",
+        "quote": "May the Force be with you."
     }
 ]
