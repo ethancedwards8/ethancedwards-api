@@ -128,5 +128,10 @@
         "id": 25,
         "author": "Patrick Henry",
         "quote": "Give me liberty or give me death!"
+    },
+    {
+        "id": 26,
+        "author": "John Stark",
+        "quote": "Live Free or Die"
     }
 ]
