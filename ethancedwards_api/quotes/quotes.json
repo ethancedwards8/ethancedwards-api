@@ -132,6 +132,11 @@
     {
         "id": 26,
         "author": "John Stark",
-        "quote": "Live Free or Die"
+        "quote": "Live Free or Die."
+    },
+    {
+        "id": 27,
+	"author": "Theodore Roosevelt",
+	"quote": "Speak softly and carry a big stick; you will go far."
     }
 ]
