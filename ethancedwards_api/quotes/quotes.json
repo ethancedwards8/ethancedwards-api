@@ -138,5 +138,10 @@
         "id": 27,
         "author": "Theodore Roosevelt",
         "quote": "Speak softly and carry a big stick; you will go far."
+    },
+    {
+        "id": 28,
+        "author": "Charles Thompson",
+        "quote": "Every day is a good day, even the bad ones."
     }
 ]
