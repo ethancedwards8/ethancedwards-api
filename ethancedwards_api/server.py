@@ -13,6 +13,7 @@ from ethancedwards_api.podcast.podcast import *
 from ethancedwards_api.congress.congress import *
 from ethancedwards_api.audiofeed.audiofeed import *
 from ethancedwards_api.jobs.jobs import *
+from ethancedwards_api.nixpkgs.nixpkgs import *
 
 def main():
     app = Flask(__name__, static_url_path='/static')
@@ -43,6 +44,8 @@ def main():
     # jobs
     api.add_resource(JobsList, "/jobs/v1",  "/jobs/v1/")
     api.add_resource(RefreshJobs, "/jobs/v1/refresh",  "/jobs/v1/refresh/")
+
+    api.add_resource(WorkflowRun, "/nixpkgs/v1")
     
     app.run(host='0.0.0.0', port=(8000 if DEV else 80))
 
