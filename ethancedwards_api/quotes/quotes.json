@@ -148,5 +148,10 @@
         "id": 29,
         "author": "Benjamin Franklin",
         "quote": "A republic, if you can keep it."
+    },
+    {
+        "id": 30,
+        "author": "Socrates",
+        "quote": "I know that I know nothing."
     }
 ]
