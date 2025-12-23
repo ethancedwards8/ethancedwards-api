@@ -34,6 +34,30 @@ feed = podgen.Podcast(name="Ethan's Misc. Listening",
                         withhold_from_itunes=True,
                         image="https://ethancedwards.com/logo.jpg")
 
+def load_episodes():
+    with open(currentDir + '/static/episode_data.json', 'r') as f:
+        episodes_data = json.load(f)
+        for ep_data in episodes_data:
+            feed.episodes += [
+                Episode(title=ep_data['title'],
+                        media=Media(ep_data['media_url']),
+                        summary=ep_data['summary'])
+            ]
+
+def save_episodes():
+    episodes_data = []
+    for episode in feed.episodes:
+        episodes_data.append({
+            'title': episode.title,
+            'media_url': episode.media.url,
+            'summary': episode.summary,
+        })
+
+    with open(currentDir + '/static/episode_data.json', 'w') as f:
+        json.dump(episodes_data, f)
+
+# Load episodes on startup
+load_episodes()
 
 def updateFile(feed):
     with open(currentDir + '/static/feed.xml', 'w') as feed_file:
@@ -64,6 +88,7 @@ class AudioFeed(Resource):
                         summary=info_dict['description'])
         ]
 
+        save_episodes()
         updateFile(feed)
         
         return {"message": "success, added episode " + info_dict['title']}, 200
