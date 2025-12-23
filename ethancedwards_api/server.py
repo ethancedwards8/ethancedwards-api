@@ -15,8 +15,10 @@ from ethancedwards_api.audiofeed.audiofeed import *
 from ethancedwards_api.jobs.jobs import *
 from ethancedwards_api.nixpkgs.nixpkgs import *
 
+static_dir = os.path.dirname(sys.argv[0]) + '/static'
+
 def main():
-    app = Flask(__name__, static_url_path='/static')
+    app = Flask(__name__, static_url_path='/static', static_folder=static_dir)
     api = Api(app)
     DEV = os.environ.get('DEV')
     
