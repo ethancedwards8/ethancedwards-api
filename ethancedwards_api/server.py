@@ -41,7 +41,7 @@ def main():
     api.add_resource(AddressCongress, "/congress/v1/address/<string:address>", "/congress/v1/address/<string:address>/")
     api.add_resource(MemberFetch, "/congress/v1/member/<string:bioguide>", "/congress/v1/member/<string:bioguide>/")
     
-    api.add_resource(AudioFeed, "/audiofeed/v1")
+    api.add_resource(AudioFeed, "/audiofeed/v1", "/audiofeed/v1/", "/audiofeed/v1/dump")
 
     # jobs
     api.add_resource(JobsList, "/jobs/v1",  "/jobs/v1/")
