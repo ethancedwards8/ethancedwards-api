@@ -35,7 +35,10 @@ feed = podgen.Podcast(name="Ethan's Misc. Listening",
                         image="https://ethancedwards.com/logo.jpg")
 
 def load_episodes():
-    with open(currentDir + '/static/episode_data.json', 'r') as f:
+    if not os.path.isfile(currentDir + '/static/episodes_data.json'):
+        return
+
+    with open(currentDir + '/static/episode_data.json', 'r+') as f:
         episodes_data = json.load(f)
         for ep_data in episodes_data:
             feed.episodes += [
