@@ -13,6 +13,7 @@ dependencies = [
     "feedparser>=6.0.11,<7",
     "pygeocodio>=1.4.0,<2",
     "python-jobspy>=1.1.76,<2",
+    "pyzotero>=1.11.0",
 ]
 
 [project.scripts]

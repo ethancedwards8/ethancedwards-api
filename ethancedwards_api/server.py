@@ -14,6 +14,7 @@ from ethancedwards_api.congress.congress import *
 from ethancedwards_api.audiofeed.audiofeed import *
 from ethancedwards_api.jobs.jobs import *
 from ethancedwards_api.nixpkgs.nixpkgs import *
+from ethancedwards_api.zotero.zotero import *
 
 static_dir = os.path.dirname(sys.argv[0]) + '/static'
 
@@ -46,6 +47,9 @@ def main():
     # jobs
     api.add_resource(JobsList, "/jobs/v1",  "/jobs/v1/")
     api.add_resource(RefreshJobs, "/jobs/v1/refresh",  "/jobs/v1/refresh/")
+
+    # zotero
+    api.add_resource(Readings, "/zotero/v1")
 
     api.add_resource(WorkflowRun, "/nixpkgs/v1")
     
