@@ -15,12 +15,20 @@ zot = Zotero(LIB_ID, 'user', ZOTERO_KEY)  # local=True for read access to local 
 
 
 class Reading:
-    def __init__(self, title, authors, link, date, tags):
+    def __init__(self,
+                 title,
+                 authors,
+                 link,
+                 date,
+                 tags,
+                 dateAdded
+                 ):
         self.title = title
         self.author = authors
         self.link = link
         self.date = date
         self.tags = tags
+        self.dateAdded = dateAdded
 
     def toJSON(self):
         return self.__dict__
@@ -36,7 +44,8 @@ def getReadings():
                           authors=entry.get('creators'),
                           link=entry.get('url'),
                           date=entry.get('date'),
-                          tags=entry.get('tags')
+                          tags=entry.get('tags'),
+                          dateAdded=entry.get('dateAdded')
                         ).toJSON())
 
     return readings
