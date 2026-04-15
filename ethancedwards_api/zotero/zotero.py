@@ -38,12 +38,12 @@ allowed_libraries = {
         },
         "personalphil": {
             "name": "Philosophy Readings",
-            "description": "I'm a hobbyist philosophy reader, here's some things I have read.",
+            "description": "I'm a hobbyist philosophy reader, here are some papers I have read.",
             "collection": "PYWLUTYE",
         },
         "technical": {
             "name": "Interesting Technical Readings",
-            "description": "In a world where more people let AI think for them, I believe it is more important than ever to develop expertise. Here's what I'm reading to learn.",
+            "description": "The rise of AI has made me appreciate the importance of deep expertise even more. Here’s what I’m reading to learn.",
             "collection": "P5PJ8KPF",
         },
 }
