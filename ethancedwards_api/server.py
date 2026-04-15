@@ -39,9 +39,11 @@ def main():
     api.add_resource(Podcast, "/podcast/v1", "/podcast/v1/", "/podcast/v1/", "/podcast/v1/<int:id>", "/podcast/v1/<int:id>/")
     api.add_resource(PodcastDump, "/podcast/v1/dump", "/podcast/v1/dump/")
     
+    # congress
     api.add_resource(AddressCongress, "/congress/v1/address/<string:address>", "/congress/v1/address/<string:address>/")
     api.add_resource(MemberFetch, "/congress/v1/member/<string:bioguide>", "/congress/v1/member/<string:bioguide>/")
     
+    # audiofeed
     api.add_resource(AudioFeed, "/audiofeed/v1", "/audiofeed/v1/", "/audiofeed/v1/dump")
 
     # jobs
@@ -50,7 +52,9 @@ def main():
 
     # zotero
     api.add_resource(Readings, "/zotero/v1")
+    api.add_resource(Libraries, "/zotero/v1/libraries")
 
+    # nixpkgs
     api.add_resource(WorkflowRun, "/nixpkgs/v1")
     
     app.run(host='0.0.0.0', port=(8000 if DEV else 80))
