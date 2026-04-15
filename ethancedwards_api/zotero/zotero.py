@@ -16,35 +16,35 @@ parser = reqparse.RequestParser()
 parser.add_argument('library', required=True, type=str, location='args')
 
 allowed_libraries = {
-        "LMI7UUEE": {
+        "ai": {
             "name": "Ethan's AI Reading List",
-            "slug": "ai",
-            "description": "AI is incredibly consequential for our society. Here's what I read to help me think about it."
+            "description": "AI is incredibly consequential for our society. Here's what I read to help me think about it.",
+            "collection": "LMI7UUEE",
         },
-        "ND7X873Z": {
+        "cs2620": {
             "name": "CS 2620",
-            "slug": "cs2620",
-            "description": "Here are some of the papers we read in CS 2620."
+            "description": "Here are some of the papers we read in CS 2620.",
+            "collection": "ND7X873Z",
         },
-        "EGHNTF8X": {
+        "cs1610": {
             "name": "CS 1610",
-            "slug": "cs1610",
-            "description": "Here are some of the papers we read in CS 1610."
+            "description": "Here are some of the papers we read in CS 1610.",
+            "collection": "EGHNTF8X",
         },
-        "7358XAIZ": {
+        "hsrg": {
             "name": "Harvard Systems Reading Group",
-            "slug": "hsrg",
-            "description": "Here are some of the papers we read in the HSRG."
+            "description": "Here are some of the papers we read in the HSRG.",
+            "collection": "7358XAIZ",
         },
-        "PYWLUTYE": {
+        "personalphil": {
             "name": "Philosophy Readings",
-            "slug": "personalphil",
-            "description": "I'm a hobbyist philosophy reader, here's some things I have read."
+            "description": "I'm a hobbyist philosophy reader, here's some things I have read.",
+            "collection": "PYWLUTYE",
         },
-        "P5PJ8KPF": {
+        "technical": {
             "name": "Interesting Technical Readings",
-            "slug": "technical",
-            "description": "In a world where more people let AI think for them, I believe it is more important than ever to develop expertise. Here's what I'm reading to learn."
+            "description": "In a world where more people let AI think for them, I believe it is more important than ever to develop expertise. Here's what I'm reading to learn.",
+            "collection": "P5PJ8KPF",
         },
 }
 
@@ -98,12 +98,13 @@ class Readings(Resource):
         if lib not in allowed_libraries:
             return "access denied", 403
 
-        reading_list = getReadings(lib)
+        reading_list = getReadings(allowed_libraries[lib]['collection'])
 
-        readings = {
-                "library": allowed_libraries[lib],
-                "list": reading_list
-        }
-        
+        readings = allowed_libraries[lib]
+
+        readings['slug'] = lib;
+
+        readings['list'] = reading_list
+
 
         return readings, 200
