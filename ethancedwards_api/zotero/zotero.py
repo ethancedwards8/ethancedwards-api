@@ -15,38 +15,46 @@ zot = Zotero(LIB_ID, 'user', ZOTERO_KEY)  # local=True for read access to local 
 parser = reqparse.RequestParser()
 parser.add_argument('library', required=True, type=str, location='args')
 
-allowed_libraries = {
-        "ai": {
+allowed_libraries = [
+        {
+            "slug": "ai",
             "name": "Ethan's AI Reading List",
             "description": "AI is incredibly consequential for our society. Here's what I read to help me think about it.",
             "collection": "LMI7UUEE",
         },
-        "cs2620": {
+        {
+            "slug": "cs2620",
             "name": "CS 2620",
             "description": "Here are some of the papers we read in CS 2620.",
             "collection": "ND7X873Z",
         },
-        "cs1610": {
+        {
+            "slug": "cs1610",
             "name": "CS 1610",
             "description": "Here are some of the papers we read in CS 1610.",
             "collection": "EGHNTF8X",
         },
-        "hsrg": {
+        {
+            "slug": "hsrg",
             "name": "Harvard Systems Reading Group",
             "description": "Here are some of the papers we read in the HSRG.",
             "collection": "7358XAIZ",
         },
-        "personalphil": {
+        {
+            "slug": "personalphil",
             "name": "Philosophy Readings",
             "description": "I'm a hobbyist philosophy reader, here are some papers I have read.",
             "collection": "PYWLUTYE",
         },
-        "technical": {
+        {
+            "slug": "technical",
             "name": "Interesting Technical Readings",
             "description": "The rise of AI has made me appreciate the importance of deep expertise even more. Here’s what I’m reading to learn.",
             "collection": "P5PJ8KPF",
         },
-}
+]
+
+permed = [ ]
 
 class Reading:
     def __init__(self,
@@ -91,20 +99,31 @@ class Libraries(Resource):
 
 class Readings(Resource):
     def get(self):
+        # this is the worst code ive ever written in my life
         args = parser.parse_args()
+
+        if len(permed) == 0:
+            for lib in allowed_libraries:
+                permed.append(lib['slug'])
 
         lib = args['library']
 
-        if lib not in allowed_libraries:
+        if lib not in permed:
             return "access denied", 403
 
-        reading_list = getReadings(allowed_libraries[lib]['collection'])
+        ind = -1
 
-        readings = allowed_libraries[lib]
+        for i in range(len(allowed_libraries)):
+            if allowed_libraries[i]['slug'] == lib:
+                ind = i
+                del i # safety
+                break
 
-        readings['slug'] = lib;
+        if ind == -1:
+            return "not found", 404
 
-        readings['list'] = reading_list
+        readings = allowed_libraries[ind]
 
+        readings['list'] = getReadings(allowed_libraries[ind]['collection'])
 
         return readings, 200
