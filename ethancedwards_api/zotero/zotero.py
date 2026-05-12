@@ -52,6 +52,12 @@ allowed_libraries = [
             "description": "The rise of AI has made me appreciate the importance of deep expertise even more. Here’s what I’m reading to learn.",
             "collection": "P5PJ8KPF",
         },
+        {
+            "slug": "language",
+            "name": "Readings on Language and Linguistics",
+            "description": "I like to learn languages and about language learning methods.",
+            "collection": "RA754PZI",
+        },
 ]
 
 permed = [ ]
